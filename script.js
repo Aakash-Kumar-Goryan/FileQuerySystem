@@ -1,5 +1,5 @@
 let query = `<form class="ui form" id='query_form'>
-                <div class="ui message">
+                <div class="ui info message">
                     <div class="header">Leave those entries blank. Which you do not want to filter</div>
                 </div>
                 <div class="two fields">
@@ -202,30 +202,75 @@ let query_formListener = (obj) => {
             }
             data = data1;
         }
-        if (data.length === 0) {
-            document.getElementById('output').innerHTML = '<p>0 Matching records found</p>'
+        let main = `<div class="ui segment">
+                        <div class="ui positive message">
+                            <div class="header">
+                                <p>${data.length} Matching records found</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ui two   buttons">
+                        <a class="ui negative button" id="myButton1" href="#">
+                            <i class="download icon"></i> Download only ND
+                        </a>
+                        <a class="ui positive button" id="myButton2" href="#">
+                            <i class="download icon"></i> Download all
+                        </a>
+                    </div>`;
+        document.getElementById('main').innerHTML += main;
+        let fileoutput1 = "ND,\n", fileoutput2 = "";
+        let res = `<table class="ui celled table" >
+                                    <thead>
+                                        <tr>
+                                            <th>S.No.</th>
+                                            <th>ND</th>
+                                            <th>NE</th>
+                                            <th>TAX</th>
+                                            <th>TY</th>
+                                            <th>CAT</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>`;
+        data.forEach(function (object, index) {
+            res += `<tr><td data-label="S.No.">${index+1}</td>`;
+            res += `<td data-label="${ND}">${object['ND']}</td>`;
+            res += `<td data-label="${NE}">${object['NE']}</td>`;
+            fileoutput1 += `ND= ${object['ND']},\n`;
+            fileoutput2 += `ND= ${object['ND']}, NE= ${object['NE']}, `;
+            if (object['TAX'] !== undefined) {
+                fileoutput2 += `TAX= ${object['TAX'][0]}`;
+                res += `<td data-label="TAX">${object['TAX'][0]}</td>`;
+            }
+            fileoutput2 += `, `;
+            if (object['TY'] !== undefined) {
+                fileoutput2 += `TY= ${object['TY'].join(' + ')}`;
+                res += `<td data-label="TY">${object['TY'].join(' + ')}</td>`;
+            }
+            fileoutput2 += `, `;
+            if (object['CAT'] !== undefined) {
+                fileoutput2 += `CAT= ${object['CAT'].join(' + ')}`;
+                res += `<td data-label="CAT">${object['CAT'].join(' + ')}</td>`;
+            }
+            fileoutput2 += `:\n`;
+            res += "</tr>";
+        });
+        res += `</tbody></table >`;
+        document.getElementById('output').innerHTML = res;
+        document.getElementById('myButton1').onclick = function (event) {
+            let blob = new Blob([fileoutput1], { type: "text/plain;charset=utf-8" });
+            let blobUrl = window.URL.createObjectURL(blob);
+            this.href = blobUrl;
+            this.target = '_blank';
+            // target filename
+            this.download = 'file_output1.txt';
         }
-        else {
-            let res = ` <table class="ui celled table" >
-                        <thead>
-                            <tr>
-                                <th>ND</th>
-                                <th>NE</th>
-                                <th>TAX</th>
-                                <th>TY</th>
-                                <th>CAT</th>
-                            </tr>
-                        </thead>
-                        <tbody>`;
-            data.forEach(function (object, index) {
-                res += "<tr>";
-                for (const property in object) {
-                    res += `<td data-label="${property}">${object[property]}</td>`;
-                }
-                res += "</tr>";
-            });
-            res += `</tbody></table >`;
-            document.getElementById('output').innerHTML = res;
+        document.getElementById('myButton2').onclick = function (event) {
+            let blob = new Blob([fileoutput2], { type: "text/plain;charset=utf-8" });
+            let blobUrl = window.URL.createObjectURL(blob);
+            this.href = blobUrl;
+            this.target = '_blank';
+            // target filename
+            this.download = 'file_output2.txt';
         }
     })
 }
