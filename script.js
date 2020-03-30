@@ -138,6 +138,7 @@ document.getElementById("my_form").addEventListener("submit", function (event) {
 })
 let query_formListener = (obj) => {
     console.log('HERE');
+    let flag = true;
     document.getElementById('query_form').addEventListener("submit", function (event) {
         console.log('HERE2');
         event.preventDefault();
@@ -202,14 +203,9 @@ let query_formListener = (obj) => {
             }
             data = data1;
         }
-        let main = `<div class="ui segment">
-                        <div class="ui positive message">
-                            <div class="header">
-                                <p>${data.length} Matching records found</p>
-                            </div>
-                        </div>
+        let main = `<div class="ui segment" id="count">
                     </div>
-                    <div class="ui two   buttons">
+                    <div class="ui two buttons">
                         <a class="ui negative button" id="myButton1" href="#">
                             <i class="download icon"></i> Download only ND
                         </a>
@@ -217,7 +213,16 @@ let query_formListener = (obj) => {
                             <i class="download icon"></i> Download all
                         </a>
                     </div>`;
-        document.getElementById('main').innerHTML += main;
+        if (flag) {
+            document.getElementById('main').innerHTML += main;
+            flag = false;
+        }
+        let count = `<div class="ui positive message">
+                        <div class="header">
+                            <p>${data.length} Matching records found</p>
+                        </div>
+                    </div>`;
+        document.getElementById('count').innerHTML = count;
         let fileoutput1 = "ND,\n", fileoutput2 = "";
         let res = `<table class="ui celled table" >
                                     <thead>
@@ -232,7 +237,7 @@ let query_formListener = (obj) => {
                                     </thead>
                                     <tbody>`;
         data.forEach(function (object, index) {
-            res += `<tr><td data-label="S.No.">${index+1}</td>`;
+            res += `<tr><td data-label="S.No.">${index + 1}</td>`;
             res += `<td data-label="${ND}">${object['ND']}</td>`;
             res += `<td data-label="${NE}">${object['NE']}</td>`;
             fileoutput1 += `ND= ${object['ND']},\n`;
