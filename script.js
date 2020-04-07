@@ -115,6 +115,8 @@ document.getElementById("my_form").addEventListener("submit", function (event) {
         }
 
         let CAThtml = "", TYhtml = "";
+        TY = [...(TY)].sort();
+        CAT = [...(CAT)].sort();
         for (let item of TY) {
             TYhtml += `<option class="item" data-value="${item}">${item}</option>`;
         }
@@ -124,15 +126,6 @@ document.getElementById("my_form").addEventListener("submit", function (event) {
         document.getElementById('query').innerHTML = query + TYhtml + query2 + CAThtml + query3;
         $('.ui.dropdown').dropdown();
         query_formListener(data);
-
-        // document.getElementById('myButton').onclick = function (event) {
-        //     let blob = new Blob([fileoutput], { type: "text/plain;charset=utf-8" });
-        //     let blobUrl = window.URL.createObjectURL(blob);
-        //     this.href = blobUrl;
-        //     this.target = '_blank';
-        //     // target filename
-        //     this.download = 'file_compare_output.txt';
-        // }
     }
 
 })
