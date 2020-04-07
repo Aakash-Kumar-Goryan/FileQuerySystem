@@ -31,7 +31,7 @@ let query = `<form class="ui form" id='query_form'>
                 </div>
                 <div class="field">
                     <label>TY?</label>
-                    <div class="ui multiple selection dropdown">
+                    <div class="ui multiple search selection dropdown">
                         <input name="TY" type="hidden" value="">
                         <i class="dropdown icon"></i>
                         <div class="default text">Select TY option(s)</div>
@@ -42,7 +42,7 @@ let query2 = `</div>
                 </div>
                 <div class="field">
                     <label>CAT?</label>
-                    <div class="ui multiple selection dropdown">
+                    <div class="ui multiple search selection dropdown">
                         <input name="CAT" type="hidden" value="">
                         <i class="dropdown icon"></i>
                         <div class="default text">Select CAT option(s)</div>
