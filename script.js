@@ -53,7 +53,7 @@ let query3 = `</div>
                 </div>
                 <div class="field">
                     <!-- <button class="ui right floated button">Right Floated</button> -->
-                    <input class="ui button" type="submit" id="submit-btn" value="Submit">
+                    <input class="ui button" type="submit" value="Submit">
                 </div>
             </form>`;
 let skip = (line) => {
@@ -98,7 +98,7 @@ document.getElementById("my_form").addEventListener("submit", function (event) {
             for (; i < output.length && skip(output[i]) != "ND"; i++) {
                 if (skip(output[i]) != "true") {
                     let arr = output[i].trim().split('=')[1].trim().split('+');  //Value
-                    let property = skip(output[i]);                             //Property name? CAT, TY, ...
+                    let property = skip(output[i]);                              //Property name? CAT, TY, ...
                     arr.forEach(function (value, index) {
                         arr[index] = value.trim()
                         if (property === "TY") {
@@ -127,7 +127,6 @@ document.getElementById("my_form").addEventListener("submit", function (event) {
         $('.ui.dropdown').dropdown();
         query_formListener(data);
     }
-
 })
 let query_formListener = (obj) => {
     console.log('HERE');
@@ -143,6 +142,7 @@ let query_formListener = (obj) => {
         const CAT = form.elements['CAT'].value;
         let data = obj;
         let data1 = [];
+        // Query code
         if (ND.length != 0) {
             data1 = [];
             for (let i = 0; i < data.length; i++) {
@@ -196,18 +196,23 @@ let query_formListener = (obj) => {
             }
             data = data1;
         }
+        //Query count details display
         let main = `<div class="ui segment" id="count">
                     </div>
-                    <div class="ui two buttons">
-                        <a class="ui negative button" id="myButton1" href="#">
-                            <i class="download icon"></i> Download only ND
-                        </a>
-                        <a class="ui positive button" id="myButton2" href="#">
-                            <i class="download icon"></i> Download all
-                        </a>
-                    </div>`;
+                    <a class="ui fluid blue button popupModal" href="#">
+                        <i class="download icon"></i> Download
+                    </a>`;
+        // `<div class="ui two buttons">
+        //     <a class="ui negative button" id="myButton1" href="#">
+        //         <i class="download icon"></i> Download only ND
+        //     </a>
+        //     <a class="ui positive button" id="myButton2" href="#">
+        //         <i class="download icon"></i> Download all
+        //     </a>
+        // </div>`;
         if (flag) {
             document.getElementById('main').innerHTML += main;
+            $('.ui.tiny.modal').modal('attach events', '.popupModal', 'show');
             flag = false;
         }
         let count = `<div class="ui positive message">
@@ -216,7 +221,7 @@ let query_formListener = (obj) => {
                         </div>
                     </div>`;
         document.getElementById('count').innerHTML = count;
-        let fileoutput1 = "ND,\n", fileoutput2 = "";
+        // Download button & query display
         let res = `<table class="ui celled table" >
                                     <thead>
                                         <tr>
@@ -233,42 +238,71 @@ let query_formListener = (obj) => {
             res += `<tr><td data-label="S.No.">${index + 1}</td>`;
             res += `<td data-label="${ND}">${object['ND']}</td>`;
             res += `<td data-label="${NE}">${object['NE']}</td>`;
-            fileoutput1 += `ND= ${object['ND']},\n`;
-            fileoutput2 += `ND= ${object['ND']}, NE= ${object['NE']}, `;
             if (object['TAX'] !== undefined) {
-                fileoutput2 += `TAX= ${object['TAX'][0]}`;
                 res += `<td data-label="TAX">${object['TAX'][0]}</td>`;
             }
-            fileoutput2 += `, `;
             if (object['TY'] !== undefined) {
-                fileoutput2 += `TY= ${object['TY'].join(' + ')}`;
                 res += `<td data-label="TY">${object['TY'].join(' + ')}</td>`;
             }
-            fileoutput2 += `, `;
             if (object['CAT'] !== undefined) {
-                fileoutput2 += `CAT= ${object['CAT'].join(' + ')}`;
                 res += `<td data-label="CAT">${object['CAT'].join(' + ')}</td>`;
             }
-            fileoutput2 += `:\n`;
             res += "</tr>";
         });
         res += `</tbody></table >`;
         document.getElementById('output').innerHTML = res;
-        document.getElementById('myButton1').onclick = function (event) {
-            let blob = new Blob([fileoutput1], { type: "text/plain;charset=utf-8" });
-            let blobUrl = window.URL.createObjectURL(blob);
-            this.href = blobUrl;
-            this.target = '_blank';
-            // target filename
-            this.download = 'file_output1.txt';
-        }
-        document.getElementById('myButton2').onclick = function (event) {
-            let blob = new Blob([fileoutput2], { type: "text/plain;charset=utf-8" });
-            let blobUrl = window.URL.createObjectURL(blob);
-            this.href = blobUrl;
-            this.target = '_blank';
-            // target filename
-            this.download = 'file_output2.txt';
-        }
+        Download(data);
     })
+}
+
+let Download = (obj) => {
+    document.getElementById('DownloadSubmit').onclick = function (event) {
+        console.log('Inside Download Form');
+        let data = obj;
+        const form = document.getElementById('download_form');
+        const ND = form.elements['ND'].checked;
+        const NE = form.elements['NE'].checked;
+        const TAX = form.elements['TAX'].checked;
+        const TY = form.elements['TY'].checked;
+        const CAT = form.elements['CAT'].checked;
+        console.log(ND);
+        console.log(NE);
+        console.log(TAX);
+        console.log(TY);
+        console.log(CAT);
+        let fileDownload = "";
+        data.forEach(function (object, index) {
+            if (ND) {
+                fileDownload += `ND= ${object['ND']},`;
+            }
+            if (NE) {
+                fileDownload += `NE= ${object['NE']}, `;
+            }
+            if (TAX) {
+                if (object['TAX'] !== undefined) {
+                    fileDownload += `TAX= ${object['TAX'][0]},`;
+                }
+            }
+            if (TY) {
+                if (object['TY'] !== undefined) {
+                    fileDownload += `TY= ${object['TY'].join(' + ')},`;
+                }
+            }
+            if (CAT) {
+                if (object['CAT'] !== undefined) {
+                    fileDownload += `CAT= ${object['CAT'].join(' + ')},`;
+                }
+            }
+            fileDownload += `\n`;
+        });
+        console.log('Download');
+        // console.log(fileDownload);
+        let blob = new Blob([fileDownload], { type: "text/plain;charset=utf-8" });
+        let blobUrl = window.URL.createObjectURL(blob);
+        console.log(blobUrl);
+        this.href = blobUrl;
+        this.target = '_blank'; 
+        // target filename
+        this.download = 'file_output.txt';
+    }
 }

@@ -49,6 +49,52 @@
             </div>
         </div>
         <div class="sixteen wide column" id="output"></div>
+        <div class="ui tiny modal">
+            <i class="close icon"></i>
+            <div class="header">
+                <i class="download icon"></i>Download
+            </div>
+            <div class="content">
+                <form class="ui form" id="download_form">
+                    <div class="five fields">
+                        <div class="field">
+                            <div class="ui toggle checkbox">
+                                <input type="checkbox" tabindex="0" class="hidden" name="ND">
+                                <label>ND</label>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="ui toggle checkbox">
+                                <input type="checkbox" tabindex="0" class="hidden" name="NE">
+                                <label>NE</label>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="ui toggle checkbox">
+                                <input type="checkbox" tabindex="0" class="hidden" name="TAX">
+                                <label>TAX</label>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="ui toggle checkbox">
+                                <input type="checkbox" tabindex="0" class="hidden" name="TY">
+                                <label>TY</label>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="ui toggle checkbox">
+                                <input type="checkbox" tabindex="0" class="hidden" name="CAT">
+                                <label>CAT</label>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>  
+            <div class="actions">
+                <div class="ui button cancel">Cancel</div>
+                <a class="ui blue button" id="DownloadSubmit"><i class="download icon"></i> Download</a>
+            </div>
+        </div>
     </div>
 </body>
 <!-- <script src="https://code.jquery.com/jquery-3.4.1.min.js"
@@ -57,6 +103,10 @@
     integrity="sha256-t8GepnyPmw9t+foMh3mKNvcorqNHamSKtKRxxpUEgFI=" crossorigin="anonymous"></script> -->
 <script src="./jquery-3.4.1.min.js"></script>
 <script src="./semantic.min.js"></script>
+<script>
+    // $('.ui.tiny.modal').modal('attach events', '.popupModal', 'show');
+    $('.ui.checkbox').checkbox();
+</script>
 <script src="script.js"></script>
 <script>
 
